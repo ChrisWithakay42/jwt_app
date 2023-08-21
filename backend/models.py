@@ -38,3 +38,16 @@ class Model(db.Model):
 class User(Model):
     user_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True)
     name = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean)
+    password_hash = db.Column(db.String(120), nullable=True)
+    todos = db.relationship('ToDo', back_populates='user', uselist=True)
+
+
+class ToDo(Model):
+    text = db.Column(db.String(150))
+    complete = db.Column(db.Boolean)
+    user_id = db.relationship('User', back_populates='todos')
+
+
+class MagicLink(Model):
+    ...

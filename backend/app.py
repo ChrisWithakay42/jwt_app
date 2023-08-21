@@ -21,6 +21,8 @@ def create_app(config_object: AppConfig = None):
     register_extensions(app)
     register_blueprints(app)
 
+    return app
+
 
 def register_extensions(app: Flask):
     db.init_app(app)
