@@ -37,3 +37,4 @@ class Model(db.Model):
 
 class User(Model):
     user_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True)
+    name = db.Column(db.String, nullable=False)
