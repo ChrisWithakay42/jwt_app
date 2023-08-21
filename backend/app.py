@@ -1,6 +1,6 @@
 from flask import Flask
 
-from api import users
+from backend.api.users import users
 from config import AppConfig
 from extensions import db
 

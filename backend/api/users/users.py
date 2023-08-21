@@ -1,4 +1,4 @@
-from api.users import users
+from backend.api.users import users
 
 
 @users.route('/users', methods=['POST'])
