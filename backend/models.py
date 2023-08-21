@@ -4,8 +4,8 @@ import uuid
 from sqlalchemy import UUID
 from sqlalchemy.exc import IntegrityError
 
-from exceptions import APIException
-from extensions import db
+from backend.exceptions import APIException
+from backend.extensions import db
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,8 @@ class User(Model):
 class ToDo(Model):
     text = db.Column(db.String(150))
     complete = db.Column(db.Boolean)
-    user_id = db.relationship('User', back_populates='todos')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', back_populates='todos')
 
 
 class MagicLink(Model):

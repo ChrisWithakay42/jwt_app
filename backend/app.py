@@ -1,8 +1,9 @@
 from flask import Flask
 
 from backend.api.users import users
-from config import AppConfig
-from extensions import db
+from backend.config import AppConfig
+from backend.extensions import db
+from backend.extensions import migrate
 
 
 def get_config_object():
@@ -26,7 +27,8 @@ def create_app(config_object: AppConfig = None):
 
 def register_extensions(app: Flask):
     db.init_app(app)
+    migrate.init_app(app, db)
 
 
 def register_blueprints(app: Flask):
-    app.register_blueprint(users)
+    app.register_blueprint(users.users_bp)
