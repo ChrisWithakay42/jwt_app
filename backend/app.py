@@ -1,6 +1,7 @@
 from flask import Flask
 
 from backend.api.users import users
+from backend.auth.login import login_bp
 from backend.config import AppConfig
 from backend.extensions import db
 from backend.extensions import migrate
@@ -32,3 +33,4 @@ def register_extensions(app: Flask):
 
 def register_blueprints(app: Flask):
     app.register_blueprint(users.users_bp)
+    app.register_blueprint(login_bp)
