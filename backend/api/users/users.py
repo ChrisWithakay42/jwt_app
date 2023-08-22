@@ -1,7 +1,6 @@
 import uuid
 
 from flask import Blueprint
-from flask import abort
 from flask import jsonify
 from flask import request
 from werkzeug.security import generate_password_hash
@@ -15,9 +14,8 @@ users_bp = Blueprint('users_bp', __name__, url_prefix='/app')
 @users_bp.route('/users', methods=['POST'])
 @authorize
 def create_user(current_user: User) -> tuple:
-
     if not current_user.is_admin:
-        abort(403, 'Permission Denied!')
+        return jsonify({'error': 'Permission Denied'}), 403
 
     data = request.get_json()
 
@@ -31,9 +29,8 @@ def create_user(current_user: User) -> tuple:
 @users_bp.route('/users', methods=['GET'])
 @authorize
 def get_all_users(current_user: User) -> tuple:
-
     if not current_user.is_admin:
-        abort(403, 'Permission Denied!')
+        return jsonify({'error': 'Permission Denied!'}), 403
 
     users = User.query.all()
     output = []
@@ -54,12 +51,12 @@ def get_all_users(current_user: User) -> tuple:
 def get_user(current_user: User, user_uuid: uuid) -> tuple:
 
     if not current_user.is_admin:
-        abort(403, 'Permission Denied!')
+        return jsonify({'error': 'Permission Denied!'}), 403
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
 
     if user is None:
-        abort(404, 'User Not Found!')
+        return jsonify({'error': 'User Not Found!'}), 404
 
     user_data = dict()
     user_data['user_uuid'] = user.user_uuid
@@ -75,14 +72,14 @@ def get_user(current_user: User, user_uuid: uuid) -> tuple:
 def promote_user(current_user: User, user_uuid: uuid) -> tuple:
 
     if not current_user.is_admin:
-        abort(403, 'Permission Denied!')
+        return jsonify({'error': 'Permission Denied!'}), 403
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
     if user is None:
-        abort(404, 'User Not Found!')
+        return jsonify({'error': 'User Not Found!'}), 404
     user.is_admin = True
     user.save()
-    return jsonify({'data': 'User has been promoted to Admin role.'}), 200
+    return jsonify({'data': 'User Successfully Promoted to Admin Role!'}), 200
 
 
 @users_bp.route('/users/<user_uuid>', methods=['DELETE'])
@@ -90,11 +87,11 @@ def promote_user(current_user: User, user_uuid: uuid) -> tuple:
 def delete_user(current_user: User, user_uuid: uuid):
 
     if not current_user.is_admin:
-        abort(403, 'Permission Denied!')
+        return jsonify({'data': 'Permission Denied!'}), 403
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
     if user is None:
-        abort(404, 'User Not Found!')
+        return jsonify({'data': 'User Not Found!'}), 404
 
     user.delete()
     return jsonify({'data': {}}), 201
