@@ -9,7 +9,7 @@ class AppConfig(BaseSettings):
     FLASK_APP: str = 'autoapp.py'
     LOG_LEVEL: str = 'INFO'
     DEBUG: bool = False
-    SECRET_KEY: str = 'not-so-secret-while-in-development'
+    SECRET_KEY: str = 'secret'
 
     SQLALCHEMY_DATABASE_URI: str
     SQLALCHEMY_ECHO: bool = False

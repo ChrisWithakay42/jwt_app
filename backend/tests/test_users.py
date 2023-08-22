@@ -4,7 +4,7 @@ from backend.models import User
 
 
 @pytest.mark.usefixtures('test_db')
-class TestCreateUser:
+class TestUserEndpoint:
     data = {
         'name': 'admin',
         'password': '12345'
@@ -18,6 +18,38 @@ class TestCreateUser:
         users = User.query.all()
         assert len(users) == 1
 
-    def test_list_users(self, test_client):
+    def test_list_users(self, test_client, user_factory):
         resp = test_client.get(self.api_url)
+        assert resp.status_code == 200
+        users = User.query.all()
+        assert len(users) == 3
+
+    def test_get_one_user(self, test_client, user_factory):
+        user = user_factory[0]
+        resp = test_client.get(f'{self.api_url}/{user.user_uuid}')
+        assert resp.status_code == 200
+
+    def test_promote_user(self, test_client, user_factory):
+        user = user_factory[0]
+        resp = test_client.put(f'{self.api_url}/{user.user_uuid}')
+        assert resp.status_code == 200
+        assert user.is_admin is True
+
+    def test_delete_user(self, test_client, user_factory):
+        user = user_factory[0]
+        resp = test_client.delete(f'{self.api_url}/{user.user_uuid}')
+        assert resp.status_code == 200
+        assert resp.json['data'] == 'User has been deleted.'
+
+
+@pytest.mark.usefixtures('test_db')
+class TestLogin:
+
+    def test_login(self, test_client):
+        user = User(
+            name='TestUser',
+            password_hash='12345'
+        )
+        user.save()
+        resp = test_client.get('/login', json={'name': user.name, "password": '12345'})
         assert resp.status_code == 200

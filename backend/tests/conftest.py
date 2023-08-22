@@ -39,9 +39,12 @@ def test_client(test_app):
 
 @pytest.fixture
 def user_factory():
-    for _ in range(3):
+    users = []
+    for i in range(3):
         user = User(
-            name='name',
-            password=''
+            name=f'name_{i}',
+            password_hash=f'12345{i}'
         )
         user.save()
+        users.append(user)
+    return users

@@ -1,26 +1,35 @@
+import datetime
+import jwt
 from flask import Blueprint
+from flask import current_app
 from flask import jsonify
 from flask import make_response
 from flask import request
 from werkzeug.security import check_password_hash
 
-from backend.jwt import generate_jwt
 from backend.models import User
 
 login_bp = Blueprint('login_bp', __name__, url_prefix='')
 
 
-@login_bp.route('/login', methods=['POST'])
+@login_bp.route('/login')
 def login():
-    data = request.get_json()
+    auth = request.authorization
 
-    if not data or 'username' not in data or 'password' not in data:
-        return make_response(jsonify({'message': 'Invalid credentials'}), 401)
+    if not auth or not auth.username or not auth.password:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    user = User.query.filter(User.name == data['username']).one_or_none()
+    user = User.query.filter(User.name == auth['username']).one_or_none()
 
-    if not check_password_hash(user.password_hash, data['password']):
-        return make_response(jsonify({'message': 'Invalid credentials'}), 401)
+    if not user:
+        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
 
-    token = generate_jwt(user_uuid=user.user_uuid, signer='secret')
-    return jsonify({'token': token})
+    if check_password_hash(user.password_hash, auth.password):
+        token = jwt.encode({
+            'user_uuid': str(user.user_uuid),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
+        }, current_app.config['SECRET_KEY']
+        )
+        return jsonify({'token': token})
+
+    return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
