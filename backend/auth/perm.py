@@ -1,4 +1,5 @@
 from functools import wraps
+from typing import Callable
 
 import jwt
 from flask import current_app
@@ -10,22 +11,22 @@ from jwt import ExpiredSignatureError
 from backend.models import User
 
 
-def authorize(f: callable):
+def authorize(f: Callable) -> Callable:
     @wraps(f)
-    def decorated(*args, **kwargs):
+    def decorated(*args, **kwargs) -> tuple:
         token = None
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
 
         if not token:
-            return jsonify({'data': 'Token is missing!'}), 401
+            return jsonify({'error': 'Unauthorized! TOKEN Missing!'}), 401
 
         try:
             data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
         except ExpiredSignatureError:
-            return jsonify({'data': 'Token has expired!'}), 401
-        except DecodeError as e:
-            return jsonify({'data': e})
+            return jsonify({'error': 'Unauthorized! TOKEN Expired!'}), 401
+        except DecodeError:
+            return jsonify({'error': 'I\'m a Tea Pot; and your token is Missing Fragments...'}), 418
         else:
             current_user = User.query.filter(User.user_uuid == data['user_uuid']).one()
             return f(current_user, *args, **kwargs)
