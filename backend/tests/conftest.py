@@ -1,3 +1,7 @@
+import base64
+import json
+import datetime
+
 import pytest
 
 from backend.app import create_app
@@ -34,6 +38,15 @@ def test_db(test_app):
 @pytest.fixture(scope='module')
 def test_client(test_app):
     testing_client = test_app.test_client()
+
+    expiration_time = datetime.datetime.now() + datetime.timedelta(minutes=180)
+    token = {
+        'user_uuid': 'fake uuid4',
+        'exp': expiration_time.timestamp()
+    }
+    auth_header = b'Basic ' + base64.b64encode(json.dumps(token).encode())
+    testing_client.environ_base['HTTP_X_ACCESS_TOKEN'] = auth_header
+
     yield testing_client
 
 

@@ -10,7 +10,7 @@ from jwt import ExpiredSignatureError
 from backend.models import User
 
 
-def token_required(f: callable):
+def authorize(f: callable):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
@@ -21,13 +21,14 @@ def token_required(f: callable):
             return jsonify({'data': 'Token is missing!'}), 401
 
         try:
-            data = jwt.decode(token, current_app.config['SECRET_KEY'])
-        except:
+            data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=["HS256"])
+        except ExpiredSignatureError:
             return jsonify({'data': 'Token has expired!'}), 401
+        except DecodeError as e:
+            return jsonify({'data': e})
         else:
-            current_user = User.query.filter(User.user_uuid == data['user_uuid'])
-
-        return f(current_user, *args, **kwargs)
+            current_user = User.query.filter(User.user_uuid == data['user_uuid']).one()
+            return f(current_user, *args, **kwargs)
 
     return decorated
 

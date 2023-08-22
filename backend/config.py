@@ -33,5 +33,3 @@ class AppConfig(BaseSettings):
                 'env': 'DATABASE_URL'
             }
         }
-
-
