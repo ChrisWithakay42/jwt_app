@@ -1,6 +1,7 @@
 import uuid
 
 from flask import Blueprint
+from flask import abort
 from flask import jsonify
 from flask import request
 from werkzeug.security import generate_password_hash
@@ -16,7 +17,7 @@ users_bp = Blueprint('users_bp', __name__, url_prefix='/app')
 def create_user(current_user: User) -> tuple:
 
     if not current_user.is_admin:
-        return jsonify({'data': 'Can not perform that action!'}), 403
+        abort(403, 'Permission Denied!')
 
     data = request.get_json()
 
@@ -24,7 +25,7 @@ def create_user(current_user: User) -> tuple:
 
     model = User(user_uuid=str(uuid.uuid4()), name=data['name'], password_hash=hashed_password, is_admin=False)
     model.save()
-    return jsonify({'data': 'New user created.'}), 200
+    return jsonify({'data': 'New User Created.'}), 200
 
 
 @users_bp.route('/users', methods=['GET'])
@@ -32,7 +33,7 @@ def create_user(current_user: User) -> tuple:
 def get_all_users(current_user: User) -> tuple:
 
     if not current_user.is_admin:
-        return jsonify({'data': 'Can not perform that action!'}), 403
+        abort(403, 'Permission Denied!')
 
     users = User.query.all()
     output = []
@@ -53,11 +54,12 @@ def get_all_users(current_user: User) -> tuple:
 def get_user(current_user: User, user_uuid: uuid) -> tuple:
 
     if not current_user.is_admin:
-        return jsonify({'data': 'Can not perform that action!'}), 403
+        abort(403, 'Permission Denied!')
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
+
     if user is None:
-        return jsonify({'data': 'No User found'}), 404
+        abort(404, 'User Not Found!')
 
     user_data = dict()
     user_data['user_uuid'] = user.user_uuid
@@ -73,11 +75,11 @@ def get_user(current_user: User, user_uuid: uuid) -> tuple:
 def promote_user(current_user: User, user_uuid: uuid) -> tuple:
 
     if not current_user.is_admin:
-        return jsonify({'data': 'Can not perform that action!'}), 403
+        abort(403, 'Permission Denied!')
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
     if user is None:
-        return jsonify({'data': 'No User found'}), 404
+        abort(404, 'User Not Found!')
     user.is_admin = True
     user.save()
     return jsonify({'data': 'User has been promoted to Admin role.'}), 200
@@ -88,11 +90,11 @@ def promote_user(current_user: User, user_uuid: uuid) -> tuple:
 def delete_user(current_user: User, user_uuid: uuid):
 
     if not current_user.is_admin:
-        return jsonify({'data': 'Can not perform that action!'}), 403
+        abort(403, 'Permission Denied!')
 
     user = User.query.filter(User.user_uuid == user_uuid).one_or_none()
     if user is None:
-        return jsonify({'data': 'No User found'}), 404
+        abort(404, 'User Not Found!')
 
     user.delete()
     return jsonify({'data': {}}), 201
