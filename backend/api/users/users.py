@@ -8,10 +8,10 @@ from werkzeug.security import generate_password_hash
 from backend.auth.perm import authorize
 from backend.models import User
 
-users_bp = Blueprint('users_bp', __name__, url_prefix='/app')
+users_api = Blueprint('users_api', __name__, url_prefix='/app')
 
 
-@users_bp.route('/users', methods=['POST'])
+@users_api.route('/users', methods=['POST'])
 @authorize
 def create_user(current_user: User) -> tuple:
     if not current_user.is_admin:
@@ -26,7 +26,7 @@ def create_user(current_user: User) -> tuple:
     return jsonify({'data': 'New User Created.'}), 200
 
 
-@users_bp.route('/users', methods=['GET'])
+@users_api.route('/users', methods=['GET'])
 @authorize
 def get_all_users(current_user: User) -> tuple:
     if not current_user.is_admin:
@@ -46,7 +46,7 @@ def get_all_users(current_user: User) -> tuple:
     return jsonify({'data': output}), 200
 
 
-@users_bp.route('/users/<user_uuid>', methods=['GET'])
+@users_api.route('/users/<user_uuid>', methods=['GET'])
 @authorize
 def get_user(current_user: User, user_uuid: uuid) -> tuple:
 
@@ -67,7 +67,7 @@ def get_user(current_user: User, user_uuid: uuid) -> tuple:
     return jsonify({'data': user_data}), 200
 
 
-@users_bp.route('/users/<user_uuid>', methods=['PUT'])
+@users_api.route('/users/<user_uuid>', methods=['PUT'])
 @authorize
 def promote_user(current_user: User, user_uuid: uuid) -> tuple:
 
@@ -82,7 +82,7 @@ def promote_user(current_user: User, user_uuid: uuid) -> tuple:
     return jsonify({'data': 'User Successfully Promoted to Admin Role!'}), 200
 
 
-@users_bp.route('/users/<user_uuid>', methods=['DELETE'])
+@users_api.route('/users/<user_uuid>', methods=['DELETE'])
 @authorize
 def delete_user(current_user: User, user_uuid: uuid):
 

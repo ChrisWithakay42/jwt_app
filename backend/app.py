@@ -34,5 +34,5 @@ def register_extensions(app: Flask):
 
 
 def register_blueprints(app: Flask):
-    app.register_blueprint(users.users_bp)
+    app.register_blueprint(users.users_api)
     app.register_blueprint(login_bp)

@@ -1,3 +1,3 @@
 from flask import Blueprint
 
-# users_bp = Blueprint('users_bp', __name__, url_prefix='/app')
+# users_api = Blueprint('users_api', __name__, url_prefix='/app')
