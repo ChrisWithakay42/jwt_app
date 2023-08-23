@@ -1,14 +1,9 @@
-# User registration and login for with Flask, React and JWT
+# User registration and login with Flask, React and JWT
 ___
-This is a simple showcase on implementing JWT based user Authentication and Authorization.
+This simple showcase on implementing JWT based user Authentication and Authorization using a Flask backend.
 
-## Setting up:
-First things first. Let's clone our repository.
-```bash
-git clone https://github.com/ChrisWithakay42/jwt_app.git
-```
+## How it works:
+When you follow this [link](http://localhost:3000) you will get redirected the project section of my [website](https://codewithakay.dev)
 
-Next we will want to install our backend requirements by running...
-```bash
-pip install -r requirements.txt
-```
+This is an interactive demonstration on how to set up and manage JWT configuration.
+By interactive; I mean that once you have been redirected to the [lounge](http://loaclhost:3000/lounge)
