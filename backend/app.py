@@ -3,6 +3,7 @@ from flask import Flask
 from backend.api.users import users
 from backend.auth.login import login_bp
 from backend.config import AppConfig
+from backend.extensions import cors
 from backend.extensions import db
 from backend.extensions import migrate
 
@@ -29,6 +30,7 @@ def create_app(config_object: AppConfig = None):
 def register_extensions(app: Flask):
     db.init_app(app)
     migrate.init_app(app, db)
+    cors(app)
 
 
 def register_blueprints(app: Flask):
