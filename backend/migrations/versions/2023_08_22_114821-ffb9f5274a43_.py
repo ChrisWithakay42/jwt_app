@@ -24,7 +24,7 @@ def upgrade():
     )
     op.create_table('user',
     sa.Column('user_uuid', sa.UUID(), nullable=True),
-    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('user_name', sa.String(), nullable=False),
     sa.Column('is_admin', sa.Boolean(), nullable=True),
     sa.Column('password_hash', sa.String(length=120), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),

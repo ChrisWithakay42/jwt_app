@@ -12,5 +12,5 @@ class TestLogin:
             password_hash='12345'
         )
         user.save()
-        resp = test_client.get('/login', json={'name': user.name, "password": '12345'})
+        resp = test_client.get('/login', json={'user_name': user.user_name, "password": '12345'})
         assert resp.status_code == 200

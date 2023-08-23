@@ -21,7 +21,7 @@ def create_user(current_user: User) -> tuple:
 
     hashed_password = generate_password_hash(data['password'], method='sha256')
 
-    model = User(user_uuid=str(uuid.uuid4()), name=data['name'], password_hash=hashed_password, is_admin=False)
+    model = User(user_name=data['user_name'], password_hash=hashed_password, is_admin=False)
     model.save()
     return jsonify({'data': 'New User Created.'}), 200
 
@@ -38,7 +38,7 @@ def get_all_users(current_user: User) -> tuple:
     for user in users:
         user_data = dict()
         user_data['user_uuid'] = user.user_uuid
-        user_data['name'] = user.name
+        user_data['user_name'] = user.user_name
         user_data['password'] = user.password_hash
         user_data['is_admin'] = user.is_admin
         output.append(user_data)
@@ -60,7 +60,7 @@ def get_user(current_user: User, user_uuid: uuid) -> tuple:
 
     user_data = dict()
     user_data['user_uuid'] = user.user_uuid
-    user_data['name'] = user.name
+    user_data['user_name'] = user.user_name
     user_data['password'] = user.password_hash
     user_data['is_admin'] = user.is_admin
 

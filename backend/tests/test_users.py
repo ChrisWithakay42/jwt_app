@@ -6,7 +6,7 @@ from backend.models import User
 @pytest.mark.usefixtures('test_db')
 class TestUserEndpoint:
     data = {
-        'name': 'admin',
+        'user_name': 'admin',
         'password': '12345'
     }
     api_url = '/app/users'

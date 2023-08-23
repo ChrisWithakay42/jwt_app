@@ -37,8 +37,9 @@ class Model(db.Model):
 
 class User(Model):
     user_uuid = db.Column(UUID(as_uuid=True), default=uuid.uuid4, unique=True)
-    name = db.Column(db.String, nullable=False)
-    is_admin = db.Column(db.Boolean)
+    # email = db.Column(db.String(345), nullable=False)
+    user_name = db.Column(db.String, nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
     password_hash = db.Column(db.String(120), nullable=True)
     todos = db.relationship('ToDo', back_populates='user', uselist=True)
 
