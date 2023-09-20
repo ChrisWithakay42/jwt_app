@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash
 from backend.auth.perm import authorize
 from backend.models import User
 
-users_api = Blueprint('users_api', __name__, url_prefix='/app')
+users_api = Blueprint('users_api', __name__, url_prefix='/api')
 
 
 @users_api.route('/users', methods=['POST'])

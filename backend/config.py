@@ -25,6 +25,8 @@ class AppConfig(BaseSettings):
         }
     }
 
+    CORS_HEADERS = 'Content-type'
+
     class Config:
         env_file = PROJECT_ROOT + '/backend/.env'
         env_file_encoding = 'utf-8'

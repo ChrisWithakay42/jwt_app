@@ -3,7 +3,7 @@ import useAuth from "../hooks/useAuth";
 import {useRef, useState, useEffect} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 
-const LOGIN_URL = "/login";
+const LOGIN_URL = "http://localhost:8003/auth/login";
 
 const Login = () => {
     const {setAuth} = useAuth()

@@ -30,7 +30,12 @@ def create_app(config_object: AppConfig = None):
 def register_extensions(app: Flask):
     db.init_app(app)
     migrate.init_app(app, db)
-    cors(app)
+    cors(app, resources={
+        r'/auth/*': {'origins': 'http://localhost:3000'},
+        r'/api/*': {'origins': 'http://localhost:3000'}
+    },
+         supports_credentials=True
+         )
 
 
 def register_blueprints(app: Flask):

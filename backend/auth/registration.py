@@ -5,10 +5,10 @@ from werkzeug.security import generate_password_hash
 
 from backend.models import User
 
-register = Blueprint('register', __name__)
+register = Blueprint('register', __name__, url_prefix='auth')
 
 
-@register.route('/registration', methods=['POST'])
+@register.route('/registeration', methods=['POST'])
 def register_user() -> tuple:
     data = request.get_json()
 
