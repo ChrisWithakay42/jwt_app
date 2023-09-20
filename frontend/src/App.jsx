@@ -1,4 +1,5 @@
-import Register from './components/Register';
+import Register from "./components/Register";
+import Login from "./components/Login"
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
@@ -8,6 +9,7 @@ function App() {
       <Routes>
           <Route path={"/"} element={<Layout />}>
               <Route path={"register"} element={<Register />}/>
+              <Route path={"login"} element={<Login />}/>
           </Route>
       </Routes>
   );
