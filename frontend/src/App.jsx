@@ -10,9 +10,6 @@ function App() {
               <Route path={"register"} element={<Register />}/>
           </Route>
       </Routes>
-    // <main className="App">
-    //   <Register />
-    // </main>
   );
 }
 
