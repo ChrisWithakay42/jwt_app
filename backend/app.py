@@ -6,6 +6,7 @@ from backend.config import AppConfig
 from backend.extensions import cors
 from backend.extensions import db
 from backend.extensions import migrate
+from backend.flask_commands import create_admin_user
 
 
 def get_config_object():
@@ -23,6 +24,7 @@ def create_app(config_object: AppConfig = None):
 
     register_extensions(app)
     register_blueprints(app)
+    register_commands(app)
 
     return app
 
@@ -41,3 +43,7 @@ def register_extensions(app: Flask):
 def register_blueprints(app: Flask):
     app.register_blueprint(users.users_api)
     app.register_blueprint(login_bp)
+
+
+def register_commands(app: Flask):
+    app.cli.add_command(create_admin_user)
