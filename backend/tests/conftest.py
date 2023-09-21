@@ -2,7 +2,9 @@ import base64
 import json
 import datetime
 
+import jwt
 import pytest
+from werkzeug.security import generate_password_hash
 
 from backend.app import create_app
 from backend.app import get_config_object
@@ -39,14 +41,17 @@ def test_db(test_app):
 def test_client(test_app):
     testing_client = test_app.test_client()
 
+    user_uuid = 'fake_uuid4'
     expiration_time = datetime.datetime.now() + datetime.timedelta(minutes=180)
-    token = {
-        'user_uuid': 'fake uuid4',
-        'exp': expiration_time.timestamp()
-    }
-    auth_header = b'Basic ' + base64.b64encode(json.dumps(token).encode())
-    testing_client.environ_base['HTTP_X_ACCESS_TOKEN'] = auth_header
 
+    secret_key = test_app.config['SECRET_KEY']
+    token_payload = {
+        'user_uuid': user_uuid,
+        'exp': expiration_time,
+    }
+    token = jwt.encode(token_payload, secret_key, algorithm='HS256')
+
+    testing_client.environ_base['HTTP_X_ACCESS_TOKEN'] = f'Bearer {token}'
     yield testing_client
 
 
@@ -61,3 +66,14 @@ def user_factory():
         user.save()
         users.append(user)
     return users
+
+
+@pytest.fixture
+def user():
+    password_hash = generate_password_hash('Admin12345!', method='sha256')
+    user = User(
+        user_name='TestUser',
+        password_hash=password_hash
+    )
+    user.save()
+    return user

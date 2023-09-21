@@ -32,6 +32,3 @@ def authorize(f: Callable) -> Callable:
             return f(current_user, *args, **kwargs)
 
     return decorated
-
-
-

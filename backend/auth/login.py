@@ -1,10 +1,10 @@
 import datetime
+
 import jwt
 from flask import Blueprint
 from flask import Response
 from flask import current_app
 from flask import jsonify
-from flask import make_response
 from flask import request
 from werkzeug.security import check_password_hash
 
@@ -35,6 +35,6 @@ def login() -> tuple[Response, int]:
             current_app.config['SECRET_KEY'],
             algorithm="HS256"
         )
-        return jsonify({'token': token}), 200
+        return jsonify({'token': f'Bearer {token}'}), 200
 
-    return jsonify({'message': 'Could not verify'}), 401
+    return jsonify({'message': 'Could not verify Password.'}), 401
