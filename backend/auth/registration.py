@@ -8,7 +8,7 @@ from backend.models import User
 register = Blueprint('register', __name__, url_prefix='auth')
 
 
-@register.route('/registeration', methods=['POST'])
+@register.route('/registration', methods=['POST'])
 def register_user() -> tuple:
     data = request.get_json()
 
