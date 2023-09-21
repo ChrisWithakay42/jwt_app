@@ -9,10 +9,10 @@ from werkzeug.security import check_password_hash
 
 from backend.models import User
 
-login_bp = Blueprint('login_bp', __name__, url_prefix='')
+login_bp = Blueprint('login_bp', __name__, url_prefix='/auth')
 
 
-@login_bp.route('/login')
+@login_bp.route('/login', methods=['POST'])
 def login():
     auth = request.authorization
 
