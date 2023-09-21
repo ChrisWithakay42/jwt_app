@@ -9,7 +9,7 @@ class TestUserEndpoint:
         'user_name': 'admin',
         'password': '12345'
     }
-    api_url = '/frontend/users'
+    api_url = '/api/users'
 
     def test_create_new_user(self, test_client):
         resp = test_client.post(self.api_url, json=self.data)
