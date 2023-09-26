@@ -16,7 +16,7 @@ def authorize(f: Callable) -> Callable:
     def decorated(*args, **kwargs) -> tuple:
         token = None
         if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
+            token = request.headers['x-access-token'].split()[1]
 
         if not token:
             return jsonify({'error': 'Unauthorized! TOKEN Missing!'}), 401

@@ -1,6 +1,7 @@
 import base64
 import json
 import datetime
+from uuid import uuid4
 
 import jwt
 import pytest
@@ -41,7 +42,7 @@ def test_db(test_app):
 def test_client(test_app):
     testing_client = test_app.test_client()
 
-    user_uuid = 'fake_uuid4'
+    user_uuid = str(uuid4())
     expiration_time = datetime.datetime.now() + datetime.timedelta(minutes=180)
 
     secret_key = test_app.config['SECRET_KEY']

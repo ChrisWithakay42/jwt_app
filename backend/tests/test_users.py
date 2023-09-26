@@ -11,8 +11,9 @@ class TestUserEndpoint:
     }
     api_url = '/api/users'
 
-    def test_create_new_user(self, test_client):
+    def test_create_new_user(self, test_client, user):
         resp = test_client.post(self.api_url, json=self.data)
+        print(resp.text)
         assert resp.status_code == 200
         assert resp.json['data'] == 'New user created.'
         users = User.query.all()
